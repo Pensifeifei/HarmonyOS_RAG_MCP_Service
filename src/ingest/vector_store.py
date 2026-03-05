@@ -107,14 +107,16 @@ def get_or_create_collection(
     return client, collection
 
 
-def _chunk_id(chunk: DocumentChunk) -> str:
-    """Deterministic ID from chunk content + source metadata.
+def _chunk_id(chunk: DocumentChunk, index: int) -> str:
+    """Deterministic ID from chunk source, position, and content.
 
-    Using a content hash makes upserts idempotent — re-ingesting the
-    same document won't create duplicates.
+    Using a composite hash makes upserts idempotent — re-ingesting the
+    same document won't create duplicates — while the index component
+    prevents collisions when a file contains identical text fragments.
     """
     source = chunk.metadata.get("source_path", "")
-    raw = f"{source}::{chunk.content}"
+    # Include index to disambiguate identical content within same source.
+    raw = f"{source}::{index}::{chunk.content[:200]}"
     return hashlib.sha256(raw.encode("utf-8")).hexdigest()[:24]
 
 
@@ -146,8 +148,8 @@ def upsert_documents(
         documents: list[str] = []
         metadatas: list[dict[str, Any]] = []
 
-        for chunk in batch:
-            ids.append(_chunk_id(chunk))
+        for j, chunk in enumerate(batch):
+            ids.append(_chunk_id(chunk, index=i + j))
             documents.append(chunk.content)
             # ChromaDB metadata values must be str | int | float | bool.
             clean_meta = {
