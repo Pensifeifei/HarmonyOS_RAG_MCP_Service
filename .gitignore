@@ -1,16 +1,24 @@
 # Python
 __pycache__/
 *.py[cod]
+*$py.class
 *.egg-info/
 dist/
 build/
+*.so
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
 
 # Virtual environment
 .venv/
 venv/
+env/
 
 # Environment variables
 .env
+.env.*
 
 # ChromaDB local storage
 chroma_data/
@@ -20,10 +28,19 @@ chroma_data/
 .idea/
 *.swp
 *.swo
+*.swn
 
 # OS
 .DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
 Thumbs.db
+ehthumbs.db
 
 # Output
 output/
+
+# Downloaded Wheels/Packages
+offline_packages/

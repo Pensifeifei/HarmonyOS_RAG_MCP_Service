@@ -27,7 +27,7 @@
 - [x] 3.2 实现 ChromaDB 的读取与查询包装函数。
 - [x] 3.3 暴露 `list_knowledge_categories` 工具。
 - [x] 3.4 暴露 `search_harmony_docs` 工具，并支持 category 过滤。
-- [ ] 3.5 完成本地 stdio 模式的运行测试。
+- [x] 3.5 完成本地 stdio 模式的运行测试。
 
 ---
 
@@ -38,6 +38,11 @@
 - **结果**：3146 个 Markdown 文件 -> 13264 个 chunks -> 全部写入 ChromaDB
 - **耗时**：1144.4s（约 19 分钟）
 - **模型**：`BAAI/bge-large-zh-v1.5`（首次运行自动下载约 1.3GB）
+
+### MCP Server stdio 模式首次验证通过 (2026-03-05)
+- **协议层**：`initialize`、`tools/list`、`list_knowledge_categories` 均正常返回
+- **搜索验证**：查询 `"ArkTS 页面路由跳转"` 返回 3 条高相关结果（cosine distance 0.31 左右）
+- **结果精度**：Top-1 命中 `arkts-routing-V5.md`（页面路由 API 文档），Top-2 命中 `start-with-ets-stage-V5.md`（快速入门中的页面跳转章节），语义匹配准确
 
 ---
 
